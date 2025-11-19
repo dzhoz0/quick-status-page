@@ -1,0 +1,7 @@
+[
+  {
+    "name": "Google",
+    "url": "http://google.com",
+    "retries": 3
+  }
+]
