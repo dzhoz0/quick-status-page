@@ -1,8 +1,10 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 const checkStatus = require("./utils/checkStatus");
 const sendEmail = require("./utils/email");
+const sendDiscordMessage = require("./utils/sendDiscordMessage");
 
 const app = express();
 const port = 3000;
@@ -34,11 +36,14 @@ async function monitorSites() {
 
         if (prevStatus !== currentStatus) {
           if (prevStatus === "up" && currentStatus === "down") {
-              console.log(`${site.name} is DOWN. Sending alert email.`);
+              console.log(`${site.name} is DOWN. Sending alert email & discord message.`);
               await sendEmail(
                 `ALERT: ${site.name} is DOWN`,
                 `${site.name} (${site.url}) went from UP to DOWN at ${new Date()}`
                 );
+              await sendDiscordMessage(
+                  '@everyone ' +`ALERT: ${site.name} is DOWN! ${site.url} went from UP to DOWN at ${new Date()}`
+              );
           }
         }
     }
