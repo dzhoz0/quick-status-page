@@ -29,10 +29,10 @@ async function monitorSites() {
         const prevStatus = statuses[site.name]?.status || "unknown";
         const currentStatus = await checkStatus(site.url, site.retries);
 
-        if (prevStatus !== currentStatus) {
-          statuses[site.name] = { status: currentStatus, lastChecked: new Date() };
-          saveStatuses();
+        statuses[site.name] = { status: currentStatus, lastChecked: new Date() };
+        saveStatuses();
 
+        if (prevStatus !== currentStatus) {
           if (prevStatus === "up" && currentStatus === "down") {
               console.log(`${site.name} is DOWN. Sending alert email.`);
               await sendEmail(
